@@ -3,12 +3,13 @@ from . import db
 from sqlalchemy import Integer, String, Column, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
-appointments = db.Table(
-    'appointments',
-    Column('doctor_id', ForeignKey('doctors.id'), primary_key=True),
-    Column('patient_id', ForeignKey('patients.id'), primary_key=True),
-    Column('Info')
-)
+class Appointment(db.Model):
+    __tablename__ = 'appointments'
+    doctor_id: Mapped[int] = mapped_column(Integer, ForeignKey('doctors.id'), primary_key=True)
+    patient_id: Mapped[int] = mapped_column(Integer, ForeignKey('patients.id'), primary_key=True)
+    info: Mapped[str] = mapped_column(String, nullable=True)
+    doctor: Mapped["Doctor"] = db.relationship(back_populates="patients")
+    patient: Mapped["Patient"] = db.relationship(back_populates="doctors")
 
 class Hospital(db.Model):
     __tablename__ = 'hospitals'
@@ -29,7 +30,7 @@ class Doctor(db.Model, UserMixin):
     surname: Mapped[str] = mapped_column(String, nullable=False)
     password: Mapped[int] = mapped_column(Integer, nullable=False)
     hospital_id: Mapped[int] = mapped_column(Integer, ForeignKey(Hospital.id))
-    patients = db.relationship('Patient', secondary = appointments, backref = 'doctors')
+    patients: Mapped[list["Appointment"]] = db.relationship(back_populates='doctor')
 
 class Patient(db.Model, UserMixin):
     __tablename__ = 'patients'
@@ -38,4 +39,5 @@ class Patient(db.Model, UserMixin):
     surname: Mapped[str] = mapped_column(String, nullable=False)
     password: Mapped[str] = mapped_column(String, nullable=False)
     passport_id: Mapped[int] = mapped_column(Integer, ForeignKey(Passport.id))
+    doctors: Mapped[list["Appointment"]] = db.relationship(back_populates='patient')
 
