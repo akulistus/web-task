@@ -1,16 +1,6 @@
 {% extends "base.html" %}
 {% block title %} Changed {% endblock %}
 {% block content %}
-<div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Dropdown button
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        {% for row in hospital_list %}
-        <a class="dropdown-item" href="/get-doctors/{{row.id}}">{{ row.name }}</a>
-        {% endfor %}
-    </div>
-  </div>
 <table class="table mb4">
     <thead>
         <tr>
@@ -26,7 +16,8 @@
             <td>{{row.name}}</td>
             <td>{{row.surname}}</td>
             <td>
-                <a href="/create-appointment/{{row.id}}" type="button" class="btn btn-success">Create appointment</a>
+                <a href="/delete-appointment/{{row.id}}" type="button" class="btn btn-success">Delete</a>
+                <a href="/edit-appointment/{{row.id}}" type="button" class="btn btn-success">Edit</a>
             </td>
         </tr>
         {% endfor %}
