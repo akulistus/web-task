@@ -3,19 +3,19 @@
 
 Архитектура базы данных выглядит следующим образом:
 
-![alt text](screenshots\scheem.drawio.png)
+![alt text](screenshots/scheem.drawio.png)
 
 Пациент может зарегистрироваться и зайти на сайт. Если пациент не авторизирован - он не имеет доступа к основному функционалу сайта:
 
-![alt text](screenshots\Login.JPG)
+![alt text](screenshots/Login.JPG)
 
 После авторизации становится возможно записаться на прием:
 
-![alt text](screenshots\appoint.JPG)
+![alt text](screenshots/appoint.JPG)
 
 Запись можно отменить или изменить (добавить или поменять доп. информацию) во вкладке Appointments:
 
-![alt text](screenshots\edit_appoint.JPG)
+![alt text](screenshots/edit_appoint.JPG)
 
 ## P.S.
 * При выборе опр. врача он больше не появляется во вкладке записи на прием, пока запись к нему существует.
