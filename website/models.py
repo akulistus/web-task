@@ -1,6 +1,6 @@
 from flask_login import UserMixin
 from . import db
-from sqlalchemy import Integer, String, Column, ForeignKey
+from sqlalchemy import Integer, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
 class Appointment(db.Model):
@@ -28,7 +28,7 @@ class Doctor(db.Model, UserMixin):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
     surname: Mapped[str] = mapped_column(String, nullable=False)
-    password: Mapped[int] = mapped_column(Integer, nullable=False)
+    speciality: Mapped[int] = mapped_column(String, nullable=False)
     hospital_id: Mapped[int] = mapped_column(Integer, ForeignKey(Hospital.id))
     patients: Mapped[list["Appointment"]] = db.relationship(back_populates='doctor')
 

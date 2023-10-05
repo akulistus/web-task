@@ -10,45 +10,52 @@ views = Blueprint("views", __name__)
 def home(id = None):
     hdata = Hospital.query.order_by(Hospital.name).all()
     ddata = Doctor.query.filter_by(hospital_id = id)
-    return render_template("home.html", hospital_list=hdata, doctor_list=ddata)
+    return render_template("home.html", hospital_list=hdata, doctor_list=ddata, user = current_user)
 
 @views.route('/appointments')
 @login_required
 def appointments():
     ddata = current_user.doctors
-    return render_template("appointments.html", doctor_list=ddata)
+    return render_template("appointments.html", doctor_list=ddata, user = current_user)
     
-@views.route('/get-doctors/<id>')
+@views.route('/get-doctors/')
 @login_required
-def get_doctors(id):
+def get_doctors():
+    id = request.args.get('id')
     return home(id)
 
-@views.route('/create-appointment/<id>')
+@views.route('/create-appointment/', methods = ['POST', 'GET'])
 @login_required
-def create_appointment(id):
+def create_appointment():
+    id = request.args.get('id')
     doctor = Doctor.query.get(id)
     appointment = Appointment()
     appointment.patient = current_user
     appointment.doctor = doctor
     doctor.patients.append(appointment)
     db.session.commit()
+    
     return home()
 
-@views.route('/delete-appointment/<did>,<pid>')
+@views.route('/delete-appointment/', methods = ['POST', 'GET'])
 @login_required
-def delete_appointment(did,pid):
-    appointmen = Appointment.query.get({"doctor_id": did, "patient_id": pid})
+def delete_appointment():
+    doc_id = request.args.get('doc_id')
+    pat_id = request.args.get('pat_id') 
+    appointmen = Appointment.query.get({"doctor_id": doc_id, "patient_id": pat_id})
     db.session.delete(appointmen)
     db.session.commit()
+
     return appointments()
 
-@views.route('/edit-appointment/<did>,<pid>', methods = ['GET', 'POST'])
+@views.route('/edit-appointment/', methods = ['GET', 'POST'])
 @login_required
-def edit_appointment(did, pid):
-    if request.method == 'POST':
-        appointmen = Appointment.query.get({"doctor_id": did, "patient_id": pid})
-        info = request.form.get('info')
-        appointmen.info = info
-        db.session.commit()
+def edit_appointment():
+    doc_id = request.args.get('doc_id')
+    pat_id = request.args.get('pat_id') 
+    appointmen = Appointment.query.get({"doctor_id": doc_id, "patient_id": pat_id})
+    info = request.form.get('info')
+    appointmen.info = info
+    db.session.commit()
 
     return appointments()

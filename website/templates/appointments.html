@@ -6,7 +6,8 @@
         <tr>
             <th scope="col">Name</th>
             <th scope="col">Surname</th>
-            <!-- <th scope="col">Speciality</th> -->
+            <th scope="col">Speciality</th>
+            <th scope="col">Info</th>
             <th scope="col">Action</th>
         </tr>
     </thead>
@@ -15,9 +16,11 @@
         <tr>
             <td>{{row.doctor.name}}</td>
             <td>{{row.doctor.surname}}</td>
+            <td>{{row.doctor.speciality}}</td>
+            <td>{{row.info}}</td>
             <td>
-                <a href="/delete-appointment/{{row.doctor_id}},{{row.patient_id}}" type="button" class="btn btn-success">Delete</a>
-                <a href="/edit-appointment/{{row.doctor_id}},{{row.patient_id}}" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-info="{{row.info}}" data-bs-docId="{{row.doctor_id}}" data-bs-patId="{{row.patient_id}}" onclick="updateFormAction(this)">Edit</a>
+                <a href="/delete-appointment/?doc_id={{row.doctor_id}}&pat_id={{row.patient_id}}" type="button" class="btn btn-success">Delete</a>
+                <a type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-info="{{row.info}}" data-bs-docId="{{row.doctor_id}}" data-bs-patId="{{row.patient_id}}" onclick="updateFormAction(this)">Edit</a>
             </td>
         </tr>
         {% endfor %}
