@@ -22,6 +22,7 @@ def login():
                 flash('Inocrrect password', category='error')
         else:
             flash('No such patient!', category='error')
+
     return render_template("login.html", user = current_user)
 
 @auth.route('/sign-up', methods = ['POST', 'GET'])
@@ -54,4 +55,5 @@ def sign_up():
 @login_required
 def logout():
     logout_user()
+    
     return redirect(url_for('auth.login'))

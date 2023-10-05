@@ -1,6 +1,7 @@
 {% extends "base.html" %}
-{% block title %} Changed {% endblock %}
+{% block title %} Appointments {% endblock %}
 {% block content %}
+<br />
 <table class="table mb4">
     <thead>
         <tr>
@@ -52,5 +53,6 @@
 
   <script 
     type="text/javascript"
-    src="{{ url_for('static', filename='index.js') }}"></script>
+    src="{{ url_for('static', filename='index.js') }}">
+  </script>
 {% endblock %}
