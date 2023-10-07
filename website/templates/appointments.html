@@ -20,8 +20,8 @@
             <td>{{row.doctor.speciality}}</td>
             <td>{{row.info}}</td>
             <td>
-                <a href="/delete-appointment/?doc_id={{row.doctor_id}}&pat_id={{row.patient_id}}" type="button" class="btn btn-success">Delete</a>
-                <a type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-info="{{row.info}}" data-bs-docId="{{row.doctor_id}}" data-bs-patId="{{row.patient_id}}" onclick="updateFormAction(this)">Edit</a>
+                <a type="button" class="btn btn-success" data-bs-docId="{{row.doctor_id}}" data-bs-patId="{{row.patient_id}}" onclick="deleteAppointment(this)" >Delete</a>
+                <a type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-info="{{row.info}}" data-bs-docId="{{row.doctor_id}}" data-bs-patId="{{row.patient_id}}" onclick="updateAppointment(this)">Edit</a>
             </td>
         </tr>
         {% endfor %}
@@ -36,17 +36,17 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form action="" method="POST" id="myForm">
+          <form id="myForm" data-bs-docId="" data-bs-patId="">
             <div class="form-group">
                 <label for="info">Info</label>
                 <input type="info" class="form-control" id ="info" name ="info"/>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" onclick="submitForm()">Save changes</button>
-        </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" onclick="submitForm()">Save changes</button>
+          </div>
       </div>
     </div>
   </div>

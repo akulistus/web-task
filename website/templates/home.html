@@ -29,10 +29,15 @@
             <td>{{row.surname}}</td>
             <td>{{row.speciality}}</td>
             <td>
-                <a href="/create-appointment/?id={{row.id}}" type="button" class="btn btn-success">Create appointment</a>
+                <a type="button" class="btn btn-success" data-bs-Id="{{row.id}}" onclick="sendData(this)">Create appointment</a>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+
+<script 
+    type="text/javascript"
+    src="{{ url_for('static', filename='send_data.js') }}">
+  </script>
 {% endblock %}

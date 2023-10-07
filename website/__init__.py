@@ -1,12 +1,9 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy.extension import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from flask_login import LoginManager
 
-class Base(DeclarativeBase):
-    pass
-
-db = SQLAlchemy(model_class=Base)
+db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
