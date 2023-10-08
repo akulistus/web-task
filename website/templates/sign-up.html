@@ -7,37 +7,30 @@
         {{ form.hidden_tag() }}
         {{ form.name.label(class="form-label") }}
         {{ form.name(class="form-control") }}
+        <ul>
+            {% for error in form.name.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
         {{ form.surname.label(class="form-label") }}
         {{ form.surname(class="form-control") }}
         {{ form.passport_code.label(class="form-label") }}
         {{ form.passport_code(class="form-control") }}
+        <ul>
+            {% for error in form.passport_code.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
         {{ form.password1.label(class="form-label") }}
         {{ form.password1(class="form-control") }}
         {{ form.password2.label(class="form-label") }}
         {{ form.password2(class="form-control") }}
+        <ul>
+        {% for error in form.password1.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
         <br />
         {{ form.submit(class="btn btn-primary") }}
-        <!-- <div class="form-group">
-            <label for="name">Name</label>
-            <input type="name" class="form-control" id="name" name ="name" placeholder="Enter name"/>
-        </div>
-        <div class="form-group">
-            <label for="surname">Surname</label>
-            <input type="surname" class="form-control" id="surname" name ="surname" placeholder="Enter surname"/>
-        </div>
-        <div class="form-group">
-            <label for="passport_code">Passport Code</label>
-            <input type="passport_code" class="form-control" id="passport_code" name ="passport_code" placeholder="Enter Passport code"/>
-        </div>
-        <div class="form-group">
-            <label for="password1">Password</label>
-            <input type="password" class="form-control" id ="password1" name ="password1" placeholder="Enter password" />
-        </div>
-        <div class="form-group">
-            <label for="password2">Password (Confirm)</label>
-            <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm password"/>
-        </div>
-        <br />
-        <button type="submit" class="btn btn-primary">Submit</button> -->
     </form>
 {% endblock %}

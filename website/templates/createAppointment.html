@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %} SignUp {% endblock %}
+{% block content %}
+    <form method="POST">
+        <h3 align="center">New-appointment</h3>
+        <br />
+        {{ form.hidden_tag() }}
+        {{ form.doctor.label(class="form-label") }}
+        {{ form.doctor(class="form-control") }}
+        {{ form.patient.label(class="form-label") }}
+        {{ form.patient(class="form-control") }}
+        {{ form.info.label(class="form-label") }}
+        {{ form.info(class="form-control") }}
+        <br />
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+{% endblock %}

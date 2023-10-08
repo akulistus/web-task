@@ -3,15 +3,17 @@
 {% block content %}
 <form method="POST">
     <h3 align="center">Login</h3>
-    <div class="form-group">
-        <label for="name">Name</label>
-        <input type="name" class="form-control" id ="name" name ="name" placeholder="Enter name" />
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" id ="password" name ="password" placeholder="Enter password" />
-    </div>
+    {{ form.hidden_tag() }}
+    {{ form.name.label(class="form-label") }}
+    {{ form.name(class="form-control") }}
+    <ul>
+        {% for error in form.name.errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {{ form.password.label(class="form-label") }}
+    {{ form.password(class="form-control") }}
     <br />
-    <button type="login" class="btn btn-primary">Login</button>
+    {{ form.submit(class="btn btn-primary") }}
 </form>
 {% endblock %}

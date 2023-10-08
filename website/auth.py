@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, flash, redirect, url_for
-from .models import Patient, Passport
-from .forms import SignUpForm
+from .models import Patient, Passport, Hospital, Doctor, Appointment
+from .forms import SignUpForm, LoginForm, DoctorForm, AppointmentForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
@@ -9,9 +9,12 @@ auth = Blueprint("auth", __name__)
 
 @auth.route('/login', methods = ['POST', 'GET'])
 def login():
-    if request.method == 'POST':
-        name = request.form.get('name')
-        password = request.form.get('password')
+
+    form = LoginForm()
+    if form.validate_on_submit():
+
+        name = form.name.data
+        password = form.password.data
 
         patient = Patient.query.filter_by(name = name).first()
         if patient:
@@ -24,7 +27,7 @@ def login():
         else:
             flash('No such patient!', category='alert-danger')
 
-    return render_template("login.html", user = current_user)
+    return render_template("login.html", form = form, user = current_user)
 
 @auth.route('/sign-up', methods = ['POST', 'GET'])
 def sign_up():
@@ -35,29 +38,14 @@ def sign_up():
         surname = form.surname.data
         passport_code = form.passport_code.data
         password1 = form.password1.data
-        password2 = form.password2.data
-
-    # if request.method == 'POST':
-    #     name = request.form.get('name')
-    #     surname = request.form.get('surname')
-    #     passport_code = request.form.get('passport_code')
-    #     password1 = request.form.get('password1')
-    #     password2 = request.form.get('password2')
-
-    #     if len(name) < 2:
-    #         print("here")
-    #         flash('Name must be greater than 2 characters', category='alert-danger')
-    #     elif password1 != password2:
-    #         flash('Passwords don\'t match', category="alert-danger")
-    #     else:
-    #         new_passport = Passport(ind_code = passport_code)
-    #         new_patient = Patient(name = name, surname = surname, password = generate_password_hash(password1), passport = new_passport)
-    #         db.session.add(new_passport)
-    #         db.session.add(new_patient)
-    #         db.session.commit()
-    #         login_user(new_patient, remember=True)
-    #         flash('Account created!', category="alert-success")
-    #         return redirect(url_for('views.home'))
+        new_passport = Passport(ind_code = passport_code)
+        new_patient = Patient(name = name, surname = surname, password = generate_password_hash(password1), passport = new_passport)
+        db.session.add(new_passport)
+        db.session.add(new_patient)
+        db.session.commit()
+        login_user(new_patient, remember=True)
+        flash('Account created!', category="alert-success")
+        return redirect(url_for('views.home'))
 
     return render_template("sign-up.html", form = form, user = current_user)
 
@@ -67,3 +55,42 @@ def logout():
     logout_user()
     
     return redirect(url_for('auth.login'))
+
+@auth.route('/new-doctor', methods = ['POST', 'GET'])
+def new_doctor():
+
+    form = DoctorForm()
+    form.hospital.choices = [(hospital.id, hospital.name) for hospital in Hospital.query.order_by(Hospital.name).all()]
+    if form.validate_on_submit():
+        name = form.name.data
+        surname = form.surname.data
+        speciality = form.speciality.data
+        hospital_id = form.hospital.data[0]
+
+        new_doctor = Doctor(
+            name = name,
+            surname = surname,
+            speciality = speciality,
+            hospital_id = hospital_id)
+        db.session.add(new_doctor)
+        db.session.commit()
+        flash('Doctor successfully added!', category="alert-success")
+
+    return render_template("registerDoctor.html", form = form, user = current_user)
+
+@auth.route('/new-appointment', methods = ['POST', 'GET'])
+def new_appointment():
+
+    form = AppointmentForm()
+    form.doctor.choices = [(doctor.id, doctor.name) for doctor in Doctor.query.order_by(Doctor.name).all()]
+    form.patient.choices = [(patient.id, patient.name) for patient in Patient.query.order_by(Patient.name).all()]
+    if form.validate_on_submit():
+        doctor_id = form.doctor.data[0]
+        patient_id = form.patient.data[0]
+        info = form.info.data
+        appointment = Appointment(doctor_id = doctor_id, patient_id = patient_id, info = info)
+        db.session.add(appointment)
+        db.session.commit()
+        flash('Appointment successfully crated!', category="alert-success")
+
+    return render_template("createAppointment.html", form = form, user = current_user)
