@@ -20,7 +20,7 @@ function deleteAppointment(button) {
   .then(response => response.text())
   .then(data => {
       console.log(data);
-      // location.reload();
+      location.reload();
   });
 };
 
@@ -39,7 +39,7 @@ function submitForm() {
   .then(response => response.text())
   .then(data => {
       console.log(data);
-      // location.reload();
+      location.reload();
   });
 };
 
