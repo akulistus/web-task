@@ -1,9 +1,8 @@
-from flask import Blueprint, request, render_template, flash, redirect, url_for
-from .models import Patient, Passport, Hospital, Doctor, Appointment
+from werkzeug.security import check_password_hash
 from .forms import SignUpForm, LoginForm, DoctorForm, AppointmentForm
-from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
+from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
+from .services import loginUser, signUpUser, signUpNewDoctor, newAppointment, getHospitalchoices, getDoctorchoices, getPatientchoices
 
 auth = Blueprint("auth", __name__)
 
@@ -13,10 +12,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
 
-        name = form.name.data
-        password = form.password.data
-
-        patient = Patient.query.filter_by(name = name).first()
+        patient, password = loginUser(form)
         if patient:
             if check_password_hash(patient.password, password):
                 flash('Logged in successefully', category='alert-success')
@@ -34,15 +30,7 @@ def sign_up():
 
     form = SignUpForm()
     if form.validate_on_submit():
-        name = form.name.data
-        surname = form.surname.data
-        passport_code = form.passport_code.data
-        password1 = form.password1.data
-        new_passport = Passport(ind_code = passport_code)
-        new_patient = Patient(name = name, surname = surname, password = generate_password_hash(password1), passport = new_passport)
-        db.session.add(new_passport)
-        db.session.add(new_patient)
-        db.session.commit()
+        new_patient = signUpUser(form)
         login_user(new_patient, remember=True)
         flash('Account created!', category="alert-success")
         return redirect(url_for('views.home'))
@@ -60,20 +48,9 @@ def logout():
 def new_doctor():
 
     form = DoctorForm()
-    form.hospital.choices = [(hospital.id, hospital.name) for hospital in Hospital.query.order_by(Hospital.name).all()]
+    form.hospital.choices = getHospitalchoices()
     if form.validate_on_submit():
-        name = form.name.data
-        surname = form.surname.data
-        speciality = form.speciality.data
-        hospital_id = form.hospital.data[0]
-
-        new_doctor = Doctor(
-            name = name,
-            surname = surname,
-            speciality = speciality,
-            hospital_id = hospital_id)
-        db.session.add(new_doctor)
-        db.session.commit()
+        signUpNewDoctor(form)
         flash('Doctor successfully added!', category="alert-success")
 
     return render_template("registerDoctor.html", form = form, user = current_user)
@@ -82,15 +59,10 @@ def new_doctor():
 def new_appointment():
 
     form = AppointmentForm()
-    form.doctor.choices = [(doctor.id, doctor.name) for doctor in Doctor.query.order_by(Doctor.name).all()]
-    form.patient.choices = [(patient.id, patient.name) for patient in Patient.query.order_by(Patient.name).all()]
+    form.doctor.choices = getDoctorchoices()
+    form.patient.choices = getPatientchoices()
     if form.validate_on_submit():
-        doctor_id = form.doctor.data[0]
-        patient_id = form.patient.data[0]
-        info = form.info.data
-        appointment = Appointment(doctor_id = doctor_id, patient_id = patient_id, info = info)
-        db.session.add(appointment)
-        db.session.commit()
+        newAppointment(form)
         flash('Appointment successfully crated!', category="alert-success")
 
     return render_template("createAppointment.html", form = form, user = current_user)

@@ -15,7 +15,7 @@ class Appointment(db.Model):
 class Hospital(db.Model):
     __tablename__ = 'hospitals'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    name: Mapped[str] = mapped_column(String(256))
+    name: Mapped[str] = mapped_column(String(50))
     address: Mapped[str] = mapped_column(String(256))
 
 class Passport(db.Model):
@@ -27,9 +27,9 @@ class Passport(db.Model):
 class Doctor(db.Model, UserMixin):
     __tablename__ = 'doctors'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    name: Mapped[str] = mapped_column(String(256), nullable=False)
-    surname: Mapped[str] = mapped_column(String(256), nullable=False)
-    speciality: Mapped[int] = mapped_column(String(256), nullable=False)
+    name: Mapped[str] = mapped_column(String(50), nullable=False)
+    surname: Mapped[str] = mapped_column(String(50), nullable=False)
+    speciality: Mapped[int] = mapped_column(String(50), nullable=False)
     hospital_id: Mapped[int] = mapped_column(Integer, ForeignKey(Hospital.id))
     patients_assosiation = db.relationship('Appointment', back_populates='doctor')
     patients = association_proxy('patients_assosiation', 'patient')
@@ -37,10 +37,9 @@ class Doctor(db.Model, UserMixin):
 class Patient(db.Model, UserMixin):
     __tablename__ = 'patients'
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    name: Mapped[str] = mapped_column(String(256), nullable=False)
-    surname: Mapped[str] = mapped_column(String(256), nullable=False)
-    password: Mapped[str] = mapped_column(String(256), nullable=False)
+    name: Mapped[str] = mapped_column(String(50), nullable=False)
+    surname: Mapped[str] = mapped_column(String(50), nullable=False)
+    password: Mapped[str] = mapped_column(String(50), nullable=False)
     passport_id: Mapped[int] = mapped_column(Integer, ForeignKey(Passport.id))
     doctors_assosiation = db.relationship('Appointment', back_populates='patient')
     doctors = association_proxy('doctors_assosiation', 'doctor')
-
